@@ -47,4 +47,41 @@ app.post('/register', async (req, res) => {
 
 app.listen(port, () => {
   console.log(`Server running on http://localhost:${port}`);
+
+    // login form
+    app.post('/login', async (req, res) => {
+    const { email, password } = req.body;
+  
+    try {
+      const client = await pool.connect();
+      const userQuery = 'SELECT * FROM users WHERE email = $1';
+      const userResult = await client.query(userQuery, [email]);
+  
+      console.log('User query result:', userResult.rows);
+  
+      if (userResult.rows.length === 0) {
+        client.release();
+        console.log('No user found with this email');
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+  
+      const user = userResult.rows[0];
+      const passwordMatch = await bcrypt.compare(password, user.password);
+  
+      console.log('Password match result:', passwordMatch);
+  
+      if (!passwordMatch) {
+        client.release();
+        console.log('Password does not match');
+        return res.status(401).json({ message: 'Invalid email or password' });
+      }
+  
+      client.release();
+      console.log('Login successful');
+      res.status(200).json({ message: 'Login successful' });
+    } catch (error) {
+      console.error('Error logging in:', error);
+      res.status(500).json({ message: 'Internal server error' });
+    }
+  });
 });

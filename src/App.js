@@ -2,6 +2,8 @@ import logo from './logo.svg';
 import './App.css';
 import React from 'react';
 import Register from './Register';
+import LoginForm from './components/LoginForm';
+
 
 function App() {
   return (
@@ -12,8 +14,8 @@ function App() {
           Edit <code>src/App.js</code> and save to reload.
         </p>
         <div>
-      <h1>User Registration</h1>
-      <Register />
+       <h1>Register</h1> 
+      <LoginForm />
     </div>
       </header>
     </div>
