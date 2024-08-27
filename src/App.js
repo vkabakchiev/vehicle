@@ -1,22 +1,30 @@
-import logo from './logo.svg';
+//import logo from './logo.svg';
 import './App.css';
-import React from 'react';
-import Register from './Register';
+import React, { useState } from 'react';
+//import Register from './Register';
 import LoginForm from './components/LoginForm';
+import Navbar from './components/Navbar';
 
 
 function App() {
+  const [user, setUser] = useState(null);
+
+  const handleLogin = (userData) => {
+    setUser(userData);
+  };
+
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <div>
-       <h1>Register</h1> 
-      <LoginForm />
-    </div>
+        <Navbar user={user} />
+        {user ? (
+          <p>Welcome, {user.name}!</p>
+        ) : (
+          <>
+            <h1>Login</h1>
+            <LoginForm onLogin={handleLogin} />
+          </>
+        )}
       </header>
     </div>
   );

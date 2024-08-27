@@ -1,26 +1,35 @@
-// src/components/LoginForm.js
 import React, { useState } from 'react';
 
-const LoginForm = () => {
+const LoginForm = ({ onLogin }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch('http://localhost:5000/login', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ email, password }),
-    });
+    try {
+      const response = await fetch('http://localhost:3001/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ email, password }),
+      });
 
-    const data = await response.json();
-    if (response.ok) {
-      alert('Login successful');
-      // Handle successful login (e.g., store token, redirect)
-    } else {
-      alert(data.message);
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        throw new Error('Invalid JSON response');
+      }
+
+      const data = await response.json();
+      if (response.ok) {
+        alert('Login successful');
+        onLogin(data.user); // Pass the user data to the parent component
+      } else {
+        alert(data.message);
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+      alert('Network error or invalid JSON response. Please try again.');
     }
   };
 

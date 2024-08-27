@@ -36,3 +36,28 @@
     transform: rotate(360deg);
   }
 }
+
+
+
+/* App.css */
+.navbar-left {
+  float: left;
+  margin-right: 20px;
+}
+
+.navbar-menu {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+}
+
+.navbar-menu li {
+  float: left;
+  margin-right: 10px;
+}
+
+.navbar-menu li a {
+  text-decoration: none;
+  color: #000;
+}
