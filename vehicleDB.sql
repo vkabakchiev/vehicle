@@ -84,8 +84,7 @@ DROP TABLE IF EXISTS items;
     opisaninie VARCHAR,
     item VARCHAR,
     stoinost real
-
- );
+);
 
 CREATE USER viktor WITH PASSWORD '102501';
 GRANT CONNECT ON DATABASE  testDB TO svetli;
