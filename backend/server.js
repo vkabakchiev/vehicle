@@ -5,7 +5,7 @@ const cors = require('cors');
 const { Pool } = require('pg');
 
 const app = express();
-const port = 3001;
+const port = 3001; // Ensure this matches the port your backend is running on
 
 // Configure the PostgreSQL connection pool
 const pool = new Pool({
@@ -22,36 +22,33 @@ app.use(bodyParser.json());
 // Enable CORS for all routes
 app.use(cors());
 
-// Login route
-app.post('/login', async (req, res) => {
-  const { email, password } = req.body;
+// Registration route
+app.post('/register', async (req, res) => {
+  const { name, email, password } = req.body;
 
   try {
     const client = await pool.connect();
     const userQuery = 'SELECT * FROM users WHERE email = $1';
     const userResult = await client.query(userQuery, [email]);
 
-    if (userResult.rows.length === 0) {
+    if (userResult.rows.length > 0) {
       client.release();
-      return res.status(401).json({ message: 'Invalid email or password' });
+      return res.status(409).json({ message: 'User already exists' });
     }
 
-    const user = userResult.rows[0];
-    const passwordMatch = await bcrypt.compare(password, user.password);
-
-    if (!passwordMatch) {
-      client.release();
-      return res.status(401).json({ message: 'Invalid email or password' });
-    }
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const insertQuery = 'INSERT INTO users (name, email, password) VALUES ($1, $2, $3) RETURNING user_id'; // Ensure this matches your primary key column
+    const result = await client.query(insertQuery, [name, email, hashedPassword]);
 
     client.release();
-    res.status(200).json({ message: 'Login successful', user: { name: user.name, email: user.email } });
+    res.status(201).json({ message: 'User registered successfully', userId: result.rows[0].user_id });
   } catch (error) {
-    console.error('Error logging in:', error);
+    console.error('Error registering user:', error);
     res.status(500).json({ message: 'Internal server error' });
   }
 });
 
+// Vehicle route
 app.post('/vehicles', async (req, res) => {
   const {
     carmark_id, carmodel_id, transport_id, regno, win, motor_no, reg_year, city,
