@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import LoginForm from './components/LoginForm';
-import Register from './Register';
+import Register from './components/Register';
 import VehicleForm from './components/VehicleForm';
+import ProtectedRoute from './components/ProtectedRoute';
+import './App.css';
 
 function App() {
   const [user, setUser] = useState(null);
@@ -12,34 +15,35 @@ function App() {
   };
 
   const handleRegister = (userData) => {
-    // Handle the registration logic here
-    // For example, you can set the user data after registration
     setUser(userData);
   };
 
   const handleVehicleSubmit = (vehicleData) => {
-    // Handle the vehicle form submission logic here
     console.log('Vehicle submitted:', vehicleData);
   };
 
   return (
-    <div className="App">
-      <header className="App-header">
-        <Navbar user={user} />
-        {user ? (
-          <>
-            <h1>Vehicle Form</h1>
-            <VehicleForm onSubmit={handleVehicleSubmit} />
-          </>
-        ) : (
-          <>
-            
-            <h1>Register</h1>
-            <Register onRegister={handleRegister} />
-          </>
-        )}
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <header className="App-header">
+          <Navbar user={user} />
+          <Routes>
+            <Route path="/register" element={
+              <ProtectedRoute user={user}>
+                <Register onRegister={handleRegister} />
+              </ProtectedRoute>
+            } />
+            <Route path="/login" element={<LoginForm onLogin={handleLogin} />} />
+            <Route path="/vehicle" element={
+              <ProtectedRoute user={user}>
+                <VehicleForm onSubmit={handleVehicleSubmit} />
+              </ProtectedRoute>
+            } />
+            <Route path="/" element={user ? <h1>Welcome, {user.name}!</h1> : <LoginForm onLogin={handleLogin} />} />
+          </Routes>
+        </header>
+      </div>
+    </Router>
   );
 }
 
