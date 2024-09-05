@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'; // Import Navigate here
 import Navbar from './components/Navbar';
 import LoginForm from './components/LoginForm';
 import Register from './components/Register';
@@ -31,8 +31,8 @@ function App() {
   return (
     <Router>
       <div className="App">
+        {user && <Navbar user={user} />}
         <header className="App-header">
-          <Navbar user={user} />
           <Routes>
             <Route path="/register" element={
               <ProtectedRoute user={user}>
@@ -45,7 +45,7 @@ function App() {
                 <VehicleForm onSubmit={handleVehicleSubmit} />
               </ProtectedRoute>
             } />
-            <Route path="/" element={user ? <h1>Welcome, {user.name}!</h1> : <LoginForm onLogin={handleLogin} />} />
+            <Route path="/" element={user ? <Navigate to="/vehicle" /> : <LoginForm onLogin={handleLogin} />} />
           </Routes>
         </header>
       </div>

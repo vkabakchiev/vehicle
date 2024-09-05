@@ -72,7 +72,7 @@ CREATE TABLE transport (
     transport_name VARCHAR (50),
     isactive BOOLEAN
 );
-
+/*
 DROP TABLE IF EXISTS carmark;
 CREATE TABLE carmark (
     carmark_id SERIAL PRIMARY KEY,
@@ -88,7 +88,7 @@ CREATE TABLE carmodel (
     carmodelname VARCHAR,
     isactive BOOLEAN
 );
-
+*/
 DROP TABLE IF EXISTS users;
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
@@ -97,7 +97,9 @@ CREATE TABLE users (
     password VARCHAR,
     createdt_ad DATE,
     modified DATE,
-    isactive BOOLEAN
+    isactive BOOLEAN,
+    admin BOOLEAN DEFAULT FALSE
+
 );
 
 DROP TABLE IF EXISTS items;
@@ -113,3 +115,8 @@ DROP TABLE IF EXISTS items;
     stoinost real
 );
 
+ALTER TABLE users
+ADD COLUMN admin BOOLEAN DEFAULT FALSE;
+UPDATE users
+SET admin = TRUE
+WHERE email = 'viktorkabakchiev@gmail.com';
