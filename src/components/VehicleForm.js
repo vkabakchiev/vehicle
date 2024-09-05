@@ -2,9 +2,8 @@ import React, { useState } from 'react';
 
 const VehicleForm = ({ onSubmit }) => {
   const [formData, setFormData] = useState({
-    carmark_id: '',
-    carmodel_id: '',
-    transport_id: '',
+    carmark: '',
+    carmodel: '',
     regno: '',
     win: '',
     motor_no: '',
@@ -18,7 +17,6 @@ const VehicleForm = ({ onSubmit }) => {
     max_mass_camp: '',
     bruto_ton: '',
     EURO_CAT: '',
-    user_date: '',
     user_id: '',
     max_posible_mass: '',
     isactive: false,
@@ -40,17 +38,13 @@ const VehicleForm = ({ onSubmit }) => {
   return (
     <form onSubmit={handleSubmit}>
       <div>
-        <label>Carmark ID:</label>
-        <input type="number" name="carmark_id" value={formData.carmark_id} onChange={handleChange} required />
+        <label>Carmark:</label>
+        <input type="text" name="carmark" value={formData.carmark} onChange={handleChange} required />
       </div>
       <div>
-        <label>Carmodel ID:</label>
-        <input type="number" name="carmodel_id" value={formData.carmodel_id} onChange={handleChange} required />
-      </div>
-      <div>
-        <label>Transport ID:</label>
-        <input type="number" name="transport_id" value={formData.transport_id} onChange={handleChange} required />
-      </div>
+        <label>Carmodel:</label>
+        <input type="text" name="carmodel" value={formData.carmodel} onChange={handleChange} required />
+      </div>      
       <div>
         <label>Registration Number:</label>
         <input type="text" name="regno" value={formData.regno} onChange={handleChange} required />
@@ -102,15 +96,7 @@ const VehicleForm = ({ onSubmit }) => {
       <div>
         <label>EURO CAT:</label>
         <input type="text" name="EURO_CAT" value={formData.EURO_CAT} onChange={handleChange} required />
-      </div>
-      <div>
-        <label>User Date:</label>
-        <input type="date" name="user_date" value={formData.user_date} onChange={handleChange} required />
-      </div>
-      <div>
-        <label>User ID:</label>
-        <input type="number" name="user_id" value={formData.user_id} onChange={handleChange} required />
-      </div>
+      </div>             
       <div>
         <label>Max Possible Mass:</label>
         <input type="number" name="max_posible_mass" value={formData.max_posible_mass} onChange={handleChange} required />

@@ -12,7 +12,7 @@ TABLESPACE = pg_default
 CONNECTION LIMIT = -1
 IS_TEMPLATE = False;
 
-
+/*
 DROP TABLE IF EXISTS vehicle;
  CREATE TABLE vehicle (
     vehicle_id SERIAL PRIMARY KEY,
@@ -38,6 +38,33 @@ DROP TABLE IF EXISTS vehicle;
     max_posible_mass real,
     isactive BOOLEAN
 );
+*/
+DROP TABLE IF EXISTS vehicle;
+CREATE TABLE vehicle (
+    vehicle_id SERIAL PRIMARY KEY,
+    carmark VARCHAR(255),
+    carmodel VARCHAR(255),
+    regno VARCHAR(8),
+    win VARCHAR(25),
+    motor_no VARCHAR(50),
+    reg_year INTEGER,
+    city VARCHAR(255),
+    axes_number INTEGER,
+    fuel VARCHAR(50),
+    motor_capacity INTEGER,
+    power_kw INTEGER,
+    power_hp INTEGER,
+    max_mass_camp INTEGER,
+    bruto_ton INTEGER,
+    EURO_CAT VARCHAR(50),
+    max_posible_mass INTEGER,
+    isactive BOOLEAN
+);
+
+
+
+
+
 
 DROP TABLE IF EXISTS transport;
 CREATE TABLE transport (
@@ -85,7 +112,4 @@ DROP TABLE IF EXISTS items;
     item VARCHAR,
     stoinost real
 );
-
-CREATE USER viktor WITH PASSWORD '102501';
-GRANT CONNECT ON DATABASE  testDB TO svetli;
 

@@ -5,6 +5,7 @@ import LoginForm from './components/LoginForm';
 import Register from './components/Register';
 import VehicleForm from './components/VehicleForm';
 import ProtectedRoute from './components/ProtectedRoute';
+import axios from 'axios';
 import './App.css';
 
 function App() {
@@ -18,8 +19,13 @@ function App() {
     setUser(userData);
   };
 
-  const handleVehicleSubmit = (vehicleData) => {
-    console.log('Vehicle submitted:', vehicleData);
+  const handleVehicleSubmit = async (vehicleData) => {
+    try {
+      const response = await axios.post('http://localhost:3001/vehicles', vehicleData);
+      console.log('Vehicle submitted:', response.data);
+    } catch (error) {
+      console.error('Error submitting vehicle:', error);
+    }
   };
 
   return (
