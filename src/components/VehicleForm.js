@@ -3,7 +3,7 @@ import { Container, Row, Col, Card, Form, Button } from 'react-bootstrap';
 import axios from 'axios';
 
 const VehicleForm = () => {
-  const [formData, setFormData] = useState({
+  const initialFormData = {
     carmark: '',
     carmodel: '',
     regno: '',
@@ -21,7 +21,9 @@ const VehicleForm = () => {
     EURO_CAT: '',
     max_posible_mass: '',
     isactive: false,
-  });
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -42,6 +44,10 @@ const VehicleForm = () => {
       console.error('Error submitting vehicle data:', error);
       alert('Failed to submit vehicle data. Please try again.');
     }
+  };
+
+  const handleReset = () => {
+    setFormData(initialFormData);
   };
 
   return (
@@ -221,8 +227,11 @@ const VehicleForm = () => {
                     onChange={handleChange}
                   />
                 </Form.Group>
-                <Button variant="primary" type="submit" className="w-100">
+                <Button variant="primary" type="submit" className="w-100 mb-2">
                   Submit
+                </Button>
+                <Button variant="secondary" type="button" className="w-100" onClick={handleReset}>
+                  Reset
                 </Button>
               </Form>
             </Card.Body>

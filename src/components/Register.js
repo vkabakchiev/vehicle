@@ -1,33 +1,42 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
 import axios from 'axios';
+//import logo from '../assets/logo.png'; // Adjust the path as necessary
 
 const Register = ({ onRegister }) => {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const initialFormData = {
+    name: '',
+    email: '',
+    password: '',
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
   const [message, setMessage] = useState('');
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/register', {
-        name,
-        email,
-        password,
-      });
-
+      const response = await axios.post('http://localhost:3001/register', formData);
       if (response.status === 201) {
-        setMessage('Registration successful!');
-        onRegister({ name, email }); // Call onRegister with user data
+        setMessage('User registered successfully');
+        onRegister(response.data.user);
       }
     } catch (error) {
-      if (error.response && error.response.status === 409) {
-        setMessage('User already exists.');
-      } else {
-        setMessage('Error registering user.');
-      }
+      console.error('Error registering user:', error);
+      setMessage('Registration failed. Please try again.');
     }
+  };
+
+  const handleReset = () => {
+    setFormData(initialFormData);
   };
 
   return (
@@ -36,6 +45,7 @@ const Register = ({ onRegister }) => {
         <Col md={6} lg={4} className="mx-auto">
           <Card>
             <Card.Body>
+              
               <Card.Title className="text-center">Register</Card.Title>
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicName">
@@ -43,8 +53,9 @@ const Register = ({ onRegister }) => {
                   <Form.Control
                     type="text"
                     placeholder="Enter name"
-                    value={name}
-                    onChange={(e) => setName(e.target.value)}
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
                     required
                   />
                 </Form.Group>
@@ -54,8 +65,9 @@ const Register = ({ onRegister }) => {
                   <Form.Control
                     type="email"
                     placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                   />
                 </Form.Group>
@@ -65,14 +77,18 @@ const Register = ({ onRegister }) => {
                   <Form.Control
                     type="password"
                     placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     required
                   />
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="w-100">
+                <Button variant="primary" type="submit" className="w-100 mb-2">
                   Register
+                </Button>
+                <Button variant="secondary" type="button" className="w-100" onClick={handleReset}>
+                  Reset
                 </Button>
               </Form>
               {message && <p className="mt-3">{message}</p>}

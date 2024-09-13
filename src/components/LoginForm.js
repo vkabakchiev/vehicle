@@ -1,37 +1,42 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
+import axios from 'axios';
+import logo from '../logo.png'; // Adjust the path as necessary
 
 const LoginForm = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const initialFormData = {
+    email: '',
+    password: '',
+  };
+
+  const [formData, setFormData] = useState(initialFormData);
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value,
+    });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await fetch(`${process.env.REACT_APP_API_URL}/login`, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({ email, password }),
-      });
-
-      const contentType = response.headers.get('content-type');
-      if (!contentType || !contentType.includes('application/json')) {
-        throw new Error('Invalid JSON response');
-      }
-
-      const data = await response.json();
-      if (response.ok) {
+      const response = await axios.post('http://localhost:3001/login', formData);
+      if (response.status === 200) {
         alert('Login successful');
-        onLogin(data.user); // Pass the user data to the parent component
+        onLogin(response.data.user); // Pass the user data to the parent component
       } else {
-        alert(data.message);
+        alert(response.data.message);
       }
     } catch (error) {
       console.error('Error during login:', error);
       alert('Network error or invalid JSON response. Please try again.');
     }
+  };
+
+  const handleReset = () => {
+    setFormData(initialFormData);
   };
 
   return (
@@ -40,6 +45,9 @@ const LoginForm = ({ onLogin }) => {
         <Col md={6} lg={4} className="mx-auto">
           <Card>
             <Card.Body>
+              <div className="text-center mb-4">
+                <img src={logo} alt="Logo" style={{ width: '150px' }} />
+              </div>
               <Card.Title className="text-center">Login</Card.Title>
               <Form onSubmit={handleSubmit}>
                 <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -47,8 +55,9 @@ const LoginForm = ({ onLogin }) => {
                   <Form.Control
                     type="email"
                     placeholder="Enter email"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
                     required
                   />
                 </Form.Group>
@@ -58,14 +67,18 @@ const LoginForm = ({ onLogin }) => {
                   <Form.Control
                     type="password"
                     placeholder="Enter password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
+                    name="password"
+                    value={formData.password}
+                    onChange={handleChange}
                     required
                   />
                 </Form.Group>
 
-                <Button variant="primary" type="submit" className="w-100">
+                <Button variant="primary" type="submit" className="w-100 mb-2">
                   Login
+                </Button>
+                <Button variant="secondary" type="button" className="w-100" onClick={handleReset}>
+                  Reset
                 </Button>
               </Form>
             </Card.Body>
