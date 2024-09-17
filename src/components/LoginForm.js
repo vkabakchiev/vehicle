@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Form, Button, Container, Row, Col, Card } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import logo from '../logo.png'; // Adjust the path as necessary
 
@@ -10,6 +11,7 @@ const LoginForm = ({ onLogin }) => {
   };
 
   const [formData, setFormData] = useState(initialFormData);
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,6 +28,7 @@ const LoginForm = ({ onLogin }) => {
       if (response.status === 200) {
         alert('Login successful');
         onLogin(response.data.user); // Pass the user data to the parent component
+        navigate('/vehicle-list'); // Redirect to the vehicle list page
       } else {
         alert(response.data.message);
       }

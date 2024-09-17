@@ -18,7 +18,7 @@ const Navbar = ({ user }) => {
         <Nav className="mr-auto">
           <Nav.Link as={Link} to="/register">Add Users</Nav.Link>
           <Nav.Link as={Link} to="/vehicle">Add Vehicle</Nav.Link>
-          <Nav.Link as={Link} to="/contact">Contact</Nav.Link>
+          <Nav.Link as={Link} to="/vehicle-list">Vehicle List</Nav.Link>
         </Nav>
         {user && (
           <Nav className="ml-auto" style={{ marginLeft: '60%' }}>

@@ -110,6 +110,22 @@ app.post('/login', async (req, res) => {
   }
 });
 
+// Vehicle list route
+app.get('/vehicles', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM vehicle');
+    client.release();
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching vehicles:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
+
+
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);

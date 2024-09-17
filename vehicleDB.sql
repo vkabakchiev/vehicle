@@ -61,11 +61,6 @@ CREATE TABLE vehicle (
     isactive BOOLEAN
 );
 
-
-
-
-
-
 DROP TABLE IF EXISTS transport;
 CREATE TABLE transport (
     transport_id SERIAL PRIMARY KEY,
@@ -120,3 +115,4 @@ ADD COLUMN admin BOOLEAN DEFAULT FALSE;
 UPDATE users
 SET admin = TRUE
 WHERE email = 'viktorkabakchiev@gmail.com';
+

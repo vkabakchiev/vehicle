@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom'; // Import Navigate here
+import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import LoginForm from './components/LoginForm';
 import Register from './components/Register';
 import VehicleForm from './components/VehicleForm';
+import VehicleList from './components/VehicleList'; // Import the new component
 import ProtectedRoute from './components/ProtectedRoute';
 import axios from 'axios';
 import './App.css';
@@ -45,7 +46,12 @@ function App() {
                 <VehicleForm onSubmit={handleVehicleSubmit} />
               </ProtectedRoute>
             } />
-            <Route path="/" element={user ? <Navigate to="/vehicle" /> : <LoginForm onLogin={handleLogin} />} />
+            <Route path="/vehicle-list" element={
+              <ProtectedRoute user={user}>
+                <VehicleList />
+              </ProtectedRoute>
+            } />
+            <Route path="/" element={user ? <Navigate to="/vehicle-list" /> : <LoginForm onLogin={handleLogin} />} />
           </Routes>
         </header>
       </div>
