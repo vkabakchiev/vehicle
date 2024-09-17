@@ -123,6 +123,24 @@ app.get('/vehicles', async (req, res) => {
   }
 });
 
+// Vehicle details route
+app.get('/vehicles/:id', async (req, res) => {
+  const { id } = req.params;
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM vehicle WHERE vehicle_id = $1', [id]);
+    client.release();
+    if (result.rows.length > 0) {
+      res.status(200).json(result.rows[0]);
+    } else {
+      res.status(404).json({ message: 'Vehicle not found' });
+    }
+  } catch (error) {
+    console.error('Error fetching vehicle details:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 
 
 

@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { Table, Container } from 'react-bootstrap';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 
 const VehicleList = () => {
   const [vehicles, setVehicles] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchVehicles = async () => {
@@ -17,6 +19,10 @@ const VehicleList = () => {
 
     fetchVehicles();
   }, []);
+
+  const handleRowClick = (id) => {
+    navigate(`/vehicle-details/${id}`);
+  };
 
   return (
     <Container>
@@ -33,7 +39,7 @@ const VehicleList = () => {
         </thead>
         <tbody>
           {vehicles.map((vehicle, index) => (
-            <tr key={vehicle.vehicle_id}>
+            <tr key={vehicle.vehicle_id} onClick={() => handleRowClick(vehicle.vehicle_id)} style={{ cursor: 'pointer' }}>
               <td>{index + 1}</td>
               <td>{vehicle.carmark}</td>
               <td>{vehicle.carmodel}</td>

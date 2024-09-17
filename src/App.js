@@ -4,7 +4,8 @@ import Navbar from './components/Navbar';
 import LoginForm from './components/LoginForm';
 import Register from './components/Register';
 import VehicleForm from './components/VehicleForm';
-import VehicleList from './components/VehicleList'; // Import the new component
+import VehicleList from './components/VehicleList';
+import VehicleDetails from './components/VehicleDetails'; // Импортиране на новия компонент
 import ProtectedRoute from './components/ProtectedRoute';
 import axios from 'axios';
 import './App.css';
@@ -49,6 +50,11 @@ function App() {
             <Route path="/vehicle-list" element={
               <ProtectedRoute user={user}>
                 <VehicleList />
+              </ProtectedRoute>
+            } />
+            <Route path="/vehicle-details/:id" element={
+              <ProtectedRoute user={user}>
+                <VehicleDetails />
               </ProtectedRoute>
             } />
             <Route path="/" element={user ? <Navigate to="/vehicle-list" /> : <LoginForm onLogin={handleLogin} />} />

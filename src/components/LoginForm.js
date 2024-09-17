@@ -26,7 +26,7 @@ const LoginForm = ({ onLogin }) => {
     try {
       const response = await axios.post('http://localhost:3001/login', formData);
       if (response.status === 200) {
-        
+                
         onLogin(response.data.user); // Pass the user data to the parent component
         navigate('/vehicle-list'); // Redirect to the vehicle list page
       } else {
