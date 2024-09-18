@@ -24,9 +24,10 @@ const LoginForm = ({ onLogin }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:3001/login', formData);
+      const response = await axios.post('http://localhost:3001/login', formData, {
+        withCredentials: true // Включете креденциали
+      });
       if (response.status === 200) {
-                
         onLogin(response.data.user); // Pass the user data to the parent component
         navigate('/vehicle-list'); // Redirect to the vehicle list page
       } else {

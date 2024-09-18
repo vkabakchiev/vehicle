@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const cors = require('cors');
 const { Pool } = require('pg');
+const session = require('express-session');
 
 const app = express();
 const port = 3001; // Ensure this matches the port your backend is running on
@@ -20,7 +21,18 @@ const pool = new Pool({
 app.use(bodyParser.json());
 
 // Enable CORS for all routes
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:3000', // Заменете с URL на вашия фронтенд
+  credentials: true
+}));
+
+// Configure session middleware
+app.use(session({
+  secret: '102501roMeo1064ROMeo8001252845Wisky', // Заменете с вашата тайна ключова дума
+  resave: false,
+  saveUninitialized: true,
+  cookie: { secure: false } // За development, използвайте secure: true за production с HTTPS
+}));
 
 // Registration route
 app.post('/register', async (req, res) => {
@@ -102,6 +114,9 @@ app.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Invalid email or password' });
     }
 
+    // Съхранете user_id в сесията
+    req.session.userId = user.user_id;
+
     client.release();
     res.status(200).json({ message: 'Login successful', user: { name: user.name, email: user.email } });
   } catch (error) {
@@ -141,8 +156,29 @@ app.get('/vehicles/:id', async (req, res) => {
   }
 });
 
+// Маршрут за добавяне на нов запис в таблицата items
+app.post('/items', async (req, res) => {
+  const { date_from, date_to, probeg, opisaninie, item, stoinost } = req.body;
+  const user_id = req.session.userId; // Използвайте user_id от сесията
+  const vehicle_id = req.body.vehicle_id;
 
+  if (!user_id) {
+    return res.status(401).json({ message: 'User not logged in' });
+  }
 
+  try {
+    const client = await pool.connect();
+    const result = await client.query(
+      'INSERT INTO items (user_id, vehicle_id, date_from, date_to, probeg, opisaninie, item, stoinost) VALUES ($1, $2, $3, $4, $5, $6, $7, $8) RETURNING *',
+      [user_id, vehicle_id, date_from, date_to, probeg, opisaninie, item, stoinost]
+    );
+    client.release();
+    res.status(200).json(result.rows[0]);
+  } catch (error) {
+    console.error('Error adding item:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
 
 // Start the server
 app.listen(port, () => {
