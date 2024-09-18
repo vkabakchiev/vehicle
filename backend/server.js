@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
@@ -10,11 +11,11 @@ const port = 3001; // Ensure this matches the port your backend is running on
 
 // Configure the PostgreSQL connection pool
 const pool = new Pool({
-  user: 'viktor',
-  host: 'localhost',
-  database: 'vehicleDB',
-  password: '102501',
-  port: 5432,
+  user: process.env.DB_USER,
+  host: process.env.DB_HOST,
+  database: process.env.DB_NAME,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
 
 // Middleware to parse JSON requests
