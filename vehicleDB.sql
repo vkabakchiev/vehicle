@@ -109,6 +109,12 @@ DROP TABLE IF EXISTS items;
     item VARCHAR,
     stoinost real
 );
+DROP TABLE IF EXISTS itemsList;
+CREATE TABLE itemsList(
+    items_id SERIAL PRIMARY KEY,
+    user_id INTEGER,
+    item VARCHAR
+   );
 
 ALTER TABLE users
 ADD COLUMN admin BOOLEAN DEFAULT FALSE;

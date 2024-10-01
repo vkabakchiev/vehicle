@@ -180,6 +180,19 @@ app.post('/items', async (req, res) => {
   }
 });
 
+// Маршрут за извличане на itemList
+app.get('/itemList', async (req, res) => {
+  try {
+    const client = await pool.connect();
+    const result = await client.query('SELECT * FROM itemsList');
+    client.release();
+    res.status(200).json(result.rows);
+  } catch (error) {
+    console.error('Error fetching item list:', error);
+    res.status(500).json({ message: 'Internal server error' });
+  }
+});
+
 // Start the server
 app.listen(port, () => {
   console.log(`Server is running on http://localhost:${port}`);
