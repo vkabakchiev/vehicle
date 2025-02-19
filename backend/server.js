@@ -1,4 +1,4 @@
-require('dotenv').config();
+require('dotenv').config({ path: '../.env' });
 const express = require('express');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
@@ -14,9 +14,15 @@ const pool = new Pool({
   user: process.env.DB_USER,
   host: process.env.DB_HOST,
   database: process.env.DB_NAME,
-  password: process.env.DB_PASSWORD,
+  password: String(process.env.DB_PASSWORD), // Уверете се, че това е низ
   port: process.env.DB_PORT,
 });
+
+console.log('DB_USER:', process.env.DB_USER);
+console.log('DB_HOST:', process.env.DB_HOST);
+console.log('DB_NAME:', process.env.DB_NAME);
+console.log('DB_PASSWORD:', process.env.DB_PASSWORD);
+console.log('DB_PORT:', process.env.DB_PORT);
 
 // Middleware to parse JSON requests
 app.use(bodyParser.json());
@@ -160,7 +166,7 @@ app.get('/vehicles/:id', async (req, res) => {
 // Маршрут за добавяне на нов запис в таблицата items
 app.post('/items', async (req, res) => {
   const { date_from, date_to, probeg, opisaninie, item, stoinost } = req.body;
-  const user_id = req.session.userId; // Използвайте user_id от сесията
+  const user_id = req.session.userId; // Изпол��вайте user_id от сесията
   const vehicle_id = req.body.vehicle_id;
 
   if (!user_id) {
